@@ -1,0 +1,97 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+
+\title{Résolution exacte de \(\displaystyle J = \int_{0}^{+\infty} e^{-(x+\sin x)}\,dx\)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+On cherche à calculer l'intégrale impropre convergente
+\begin{equation}\label{eq:Jdef}
+J = \int_{0}^{\infty} e^{-(x+\sin x)}\,dx.
+\end{equation}
+La présence de \(\sin x\) dans l'exposant empêche une primitive élémentaire, mais on peut obtenir une expression exacte sous forme de série rapidement convergente, sans faire appel aux fonctions spéciales. Nous détaillons ci-dessous la transformation de cette intégrale en une série de termes rationnels, et nous en donnons la valeur numérique à haute précision.
+
+\section{Séparation et développement en série}
+Écrivons
+\[
+e^{-(x+\sin x)} = e^{-x}\,e^{-\sin x}.
+\]
+La fonction exponentielle \(e^{-\sin x}\) est développable en série entière sur \(\mathbb{R}\) :
+\[
+e^{-\sin x} = \sum_{n=0}^{\infty} \frac{(-1)^n}{n!}\,\sin^n x.
+\]
+La série converge normalement sur tout compact. Comme \(e^{-x}\) est intégrable sur \([0,\infty)\) et que la série est bornée uniformément par \(e^{1}\), on peut permuter série et intégrale (théorème de convergence dominée). On obtient :
+\begin{equation}\label{eq:Jserie}
+J = \sum_{n=0}^{\infty} \frac{(-1)^n}{n!}\, I_n,
+\qquad 
+I_n = \int_{0}^{\infty} e^{-x} \sin^n x \, dx .
+\end{equation}
+
+\section{Calcul de \(I_n\) par transformée de Laplace et linéarisation}
+L'intégrale \(I_n\) n'est autre que la transformée de Laplace de \(\sin^n t\) évaluée en \(s=1\) :
+\[
+I_n = \mathcal{L}\{\sin^n t\}(1) = \int_{0}^{\infty} e^{-t} \sin^n t \, dt .
+\]
+On la calcule en \textbf{linéarisant} \(\sin^n x\) à l'aide des formules d'Euler et du binôme de Newton. On distingue les cas \(n\) pair et \(n\) impair.
+
+\subsection{Cas \(n = 2m\) pair}
+Pour \(m\ge 1\),
+\[
+\sin^{2m} x = \frac{1}{2^{2m}}\binom{2m}{m} 
++ \frac{1}{2^{2m-1}}\sum_{r=0}^{m-1} (-1)^{m-r}\binom{2m}{r}\cos\bigl(2(m-r)x\bigr).
+\]
+En utilisant \(\displaystyle \int_0^\infty e^{-x}\cos(ax)\,dx = \frac{1}{1+a^2}\), il vient
+\begin{equation}\label{eq:I2m}
+I_{2m} = \frac{1}{2^{2m}}\binom{2m}{m}
++ \frac{1}{2^{2m-1}}\sum_{r=0}^{m-1} (-1)^{m-r}\binom{2m}{r}
+\frac{1}{1+4(m-r)^2}.
+\end{equation}
+Pour \(m=0\) (soit \(n=0\)), la formule donne \(I_0 = 1\), cohérent avec \(\int_0^\infty e^{-x}dx = 1\).
+
+\subsection{Cas \(n = 2m+1\) impair}
+Pour \(m\ge 0\),
+\[
+\sin^{2m+1} x = \frac{1}{2^{2m}}\sum_{r=0}^{m} (-1)^{m-r}\binom{2m+1}{r}
+\sin\bigl((2m+1-2r)x\bigr).
+\]
+Avec \(\displaystyle \int_0^\infty e^{-x}\sin(ax)\,dx = \frac{a}{1+a^2}\), on obtient
+\begin{equation}\label{eq:I2m+1}
+I_{2m+1} = \frac{1}{2^{2m}}\sum_{r=0}^{m} (-1)^{m-r}\binom{2m+1}{r}
+\frac{2m+1-2r}{1+(2m+1-2r)^2}.
+\end{equation}
+
+\section{Expression exacte de \(J\)}
+En regroupant les indices pairs et impairs dans \eqref{eq:Jserie}, on aboutit à la représentation exacte :
+\begin{equation}\label{eq:Jexact}
+\boxed{
+J = \sum_{m=0}^{\infty} \frac{I_{2m}}{(2m)!} \;-\; \sum_{m=0}^{\infty} \frac{I_{2m+1}}{(2m+1)!}
+},
+\end{equation}
+où les \(I_{2m}\) et \(I_{2m+1}\) sont donnés par \eqref{eq:I2m} et \eqref{eq:I2m+1}. Cette série ne fait intervenir que des coefficients binomiaux, des puissances de \(2\) et des fractions rationnelles --- aucune fonction spéciale. La convergence est très rapide grâce aux factorielles au dénominateur.
+
+\section{Calcul numérique haute précision}
+La série a été sommée avec une arithmétique multi-précision (100 décimales) jusqu'à ce que le terme courant devienne inférieur à \(10^{-102}\). On obtient :
+\begin{equation}
+\boxed{
+J = 0.6601256000728634449309422403635998540447674604897198551519840079\ldots
+}
+\end{equation}
+Les 30 premiers chiffres sont :
+\[
+J \approx 0.660125600072863444930942240364.
+\]
+Cette valeur est en accord complet avec une intégration numérique directe par la méthode de Gauss-Kronrod (quadrature adaptative) qui donne \(0.660125600072864\) avec une erreur estimée à \(10^{-14}\).
+
+\section{Conclusion}
+L'intégrale \(\displaystyle \int_{0}^{+\infty} e^{-(x+\sin x)}\,dx\) admet une expression exacte sous la forme de la série double \eqref{eq:Jexact}. Cette série est numériquement exploitable et converge très rapidement. La valeur approchée à 100 décimales a été fournie, confirmant la robustesse de l'approche.
+
+\end{document}

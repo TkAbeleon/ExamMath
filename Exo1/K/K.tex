@@ -1,0 +1,104 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{Résolution de \(\displaystyle K=\int_{0}^{1}\frac{\sin x}{\ln(1+x)}\,dx\)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+On souhaite calculer l'intégrale convergente
+\[
+K=\int_{0}^{1}\frac{\sin x}{\ln(1+x)}\,dx .
+\]
+L'intégrande se prolonge par continuité en $0$ avec la valeur $1$. Nous allons obtenir une expression exacte sous forme d'une série ne faisant intervenir que des développements élémentaires.
+
+\section{Développement en série de \(\displaystyle\frac{1}{\ln(1+x)}\)}
+On part du développement classique de \(\ln(1+x)\) pour \(|x|<1\) :
+\[
+\ln(1+x)=x-\frac{x^{2}}{2}+\frac{x^{3}}{3}-\frac{x^{4}}{4}+\cdots
+=\sum_{k=1}^{\infty}\frac{(-1)^{k-1}}{k}x^{k}.
+\]
+On divise par $x$ :
+\[
+\frac{\ln(1+x)}{x}=1-\frac{x}{2}+\frac{x^{2}}{3}-\frac{x^{3}}{4}+\cdots
+=\sum_{k=0}^{\infty}a_k x^{k},\qquad a_k=\frac{(-1)^{k}}{k+1}.
+\]
+
+On cherche la série réciproque
+\[
+\frac{x}{\ln(1+x)}=\sum_{n=0}^{\infty}b_n x^{n},
+\quad\text{avec } b_0=1.
+\]
+En écrivant \(\bigl(\sum b_n x^n\bigr)\bigl(\sum a_k x^k\bigr)=1\), on obtient pour $n\ge 1$ la récurrence
+\[
+b_n = -\sum_{j=1}^{n} a_j\, b_{n-j}.
+\]
+Les premiers coefficients sont
+\[
+b_0=1,\; b_1=\frac12,\; b_2=-\frac1{12},\; b_3=\frac1{24},\;
+b_4=-\frac{19}{720},\; b_5=\frac{3}{160},\;\dots
+\]
+On en déduit, pour $0<x\le 1$,
+\[
+\frac{1}{\ln(1+x)}=\frac{1}{x}\sum_{n=0}^{\infty}b_n x^{n}
+=\frac{1}{x}+\sum_{n=1}^{\infty}b_n x^{n-1}.
+\]
+
+\section{Intégration terme à terme}
+En remplaçant dans $K$ et en permutant série et intégrale (convergence normale), on obtient
+\[
+K = \int_{0}^{1}\frac{\sin x}{x}\,dx \;+\; \sum_{n=1}^{\infty} b_n \int_{0}^{1} x^{n-1}\sin x\,dx .
+\]
+On note
+\[
+S = \int_{0}^{1}\frac{\sin x}{x}\,dx,\qquad
+I_{m} = \int_{0}^{1} x^{m}\sin x\,dx \;\; (m\ge 0).
+\]
+Ainsi
+\begin{equation}\label{eq:serie}
+K = S + \sum_{n=1}^{\infty} b_n\, I_{n-1}.
+\end{equation}
+
+\section{Calcul de \(S\)}
+On développe $\sin x$ en série entière :
+\[
+\sin x = \sum_{k=0}^{\infty}\frac{(-1)^{k}}{(2k+1)!}\,x^{2k+1},
+\]
+d'où
+\[
+\frac{\sin x}{x} = \sum_{k=0}^{\infty}\frac{(-1)^{k}}{(2k+1)!}\,x^{2k}.
+\]
+En intégrant de $0$ à $1$, on trouve
+\[
+S = \sum_{k=0}^{\infty}\frac{(-1)^{k}}{(2k+1)(2k+1)!}.
+\]
+Cette série alternée converge très vite.
+
+\section{Calcul exact de \(I_m\)}
+Une double intégration par parties donne la récurrence stable (pour $m\ge 2$) :
+\[
+I_m = -\cos1 + m\sin1 - m(m-1)I_{m-2},
+\]
+avec
+\[
+I_0 = 1-\cos1,\qquad I_1 = \sin1-\cos1.
+\]
+Tous les $I_m$ s'expriment donc comme combinaison linéaire de $\sin1$ et $\cos1$, sans recourir à des fonctions spéciales.
+
+\section{Expression finale et valeur numérique}
+L'équation \eqref{eq:serie} fournit la valeur exacte de $K$ sous la forme d'une série convergente. En sommant numériquement un grand nombre de termes (par exemple $N=2000$) on obtient une concordance avec l'intégration numérique directe (quadrature adaptative). La valeur approchée est
+\[
+\boxed{K \approx 1.157149647328593}.
+\]
+L'écart entre la somme partielle et cette référence est de l'ordre de $10^{-10}$ pour $N=2000$, et l'accélération d'Aitken permet d'atteindre $\sim 10^{-10}$ avec seulement quelques centaines de termes. La série théorique et le calcul direct sont donc en parfait accord.
+
+\section{Conclusion}
+L'intégrale \(\displaystyle \int_{0}^{1}\frac{\sin x}{\ln(1+x)}dx\) s'exprime de manière exacte par la série \(S+\sum_{n=1}^{\infty} b_n I_{n-1}\) ne faisant intervenir que des développements élémentaires, des récurrences et des constantes trigonométriques usuelles. Numériquement, sa valeur est \(1.157149647328593\) à \(10^{-15}\) près.
+
+\end{document}

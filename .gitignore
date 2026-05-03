@@ -1,0 +1,74 @@
+### --- Python --- ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environnements virtuels
+venv/
+env/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/
+*.egg
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Notebooks
+.ipynb_checkpoints
+
+### --- LaTeX --- ###
+# Fichiers auxiliaires de compilation (les plus courants)
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# Bibliographie
+*.bbl
+*.blg
+*.bib.bak
+*.bib~
+
+# Index et glossaires
+*.idx
+*.ilg
+*.ind
+*.glo
+*.glg
+*.gls
+*.ist
+
+# Présentations (Beamer)
+*.nav
+*.snm
+*.vrb
+
+# Divers / Éditeurs
+*.bak
+*.sav
+*.tmp
+*~
+
+# PDF final (Optionnel)
+# Décommentez la ligne suivante si vous voulez générer le PDF 
+# localement sans l'envoyer sur le dépôt Git.
+# *.pdf
+
+### --- Système & IDE --- ###
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

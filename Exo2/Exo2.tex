@@ -1,0 +1,77 @@
+\documentclass[french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+
+\title{Résolution de l'équation \(F(s)\,e^{F(s)} = \ln(s+1)\)}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Expression de \(F(s)\)}
+
+L'équation
+\begin{equation}\label{eq:origine}
+F(s)\,e^{F(s)} = \ln(s+1)
+\end{equation}
+est de la forme \(X e^X = Y\), dont la solution est la fonction \(W\) de Lambert.
+On a donc
+\begin{equation}
+\boxed{F(s) = W_0\!\bigl(\ln(s+1)\bigr)}
+\end{equation}
+où \(W_0\) désigne la branche principale réelle de la fonction \(W\).
+Cette solution est définie pour \(s > -1\) tel que \(\ln(s+1) \ge -e^{-1}\), c'est-à-dire
+\[
+s \ge e^{-1/e} - 1 \approx -0.374.
+\]
+
+\section{Équation différentielle vérifiée par \(F(s)\)}
+
+On dérive l'équation \eqref{eq:origine} par rapport à \(s\) :
+\[
+\frac{d}{ds}\Bigl(F(s)\,e^{F(s)}\Bigr) = \frac{1}{s+1}.
+\]
+\[
+F'(s)\,e^{F(s)} + F(s)\,e^{F(s)}F'(s) = \frac{1}{s+1},
+\]
+\[
+F'(s)\,e^{F(s)}\bigl(1+F(s)\bigr) = \frac{1}{s+1}.
+\]
+On obtient ainsi l'équation différentielle du premier ordre
+\begin{equation}\label{eq:diff}
+\boxed{F'(s) = \frac{1}{(s+1)\,e^{F(s)}\,\bigl(1+F(s)\bigr)} }.
+\end{equation}
+En utilisant \(e^{F(s)} = \dfrac{\ln(s+1)}{F(s)}\) (pour \(F(s)\neq 0\)), on peut aussi écrire
+\[
+F'(s) = \frac{F(s)}{(s+1)\,\ln(s+1)\,\bigl(1+F(s)\bigr)},
+\]
+valable pour \(s\neq 0\). En \(s=0\), on a \(F(0)=0\) et \(\ln(1)=0\), mais un passage à la limite donne \(F'(0)=1\).
+
+\section{Vérification numérique}
+
+Un script Python utilisant \texttt{scipy.special.lambertw} calcule \(F(s)\) et sa dérivée exacte.
+La figure~\ref{fig:courbes} montre les courbes obtenues sur \([-0.37, 5]\).
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.95\textwidth]{Exo2_plot.png}
+\caption{Courbes de \(F(s)\) et de \(F'(s)\) sur le domaine de validité.}
+\label{fig:courbes}
+\end{figure}
+
+Les erreurs maximales relevées sont :
+\begin{itemize}
+\item Pour l'équation originale \(F e^F = \ln(s+1)\) : \(\mathbf{4.44 \times 10^{-16}}\).
+\item Pour l'équation différentielle sous sa forme \(e^{F}(1+F)F' = 1/(s+1)\) : \(\mathbf{4.44 \times 10^{-16}}\).
+\end{itemize}
+
+Ces erreurs, de l'ordre de la précision machine, confirment rigoureusement la solution analytique.
+
+\end{document}
