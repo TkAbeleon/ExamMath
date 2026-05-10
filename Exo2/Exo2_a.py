@@ -48,4 +48,4 @@ ax2.legend()
 
 plt.tight_layout()
 plt.savefig('Exo2_plot.png', dpi=300, bbox_inches='tight')
-plt.show()
+# plt.show()

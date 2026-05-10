@@ -7,11 +7,14 @@
 \usepackage{hyperref}
 \usepackage{enumitem}
 \usepackage{geometry}
+\usepackage{graphicx}
 \geometry{margin=2.5cm}
 
 \title{Transformée de Laplace inverse de $F(s)=\dfrac{1}{\ln 2 + |s|}$}
-\author{Votre Nom}
-\date{\today}
+\author{Nom: RANDRIAMANANTENA \\
+Prénoms: Tsiky Ny Antsa \\
+Matricule: 00550-80-23 \\
+Parcours: Génie Logiciel}
 
 \begin{document}
 
@@ -123,5 +126,12 @@ Cette série est valable pour tout $x$ réel (et même complexe).
 \section{Conclusion}
 La transformée de Laplace inverse cherchée s'exprime à l'aide des fonctions spéciales \textbf{cosinus intégral} $\operatorname{Ci}$ et \textbf{sinus intégral} $\operatorname{Si}$ (ou $\operatorname{si}$).  
 Aucune formule explicite utilisant uniquement des fonctions élémentaires n'existe. Le développement en série entière de $\operatorname{Si}$ (et celui analogue de $\operatorname{Ci}$) permet néanmoins d'en obtenir des approximations numériques.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.95\textwidth]{F_plot.png}
+\caption{Tracé de la fonction $f(t)$ généré par le code de vérification.}
+\label{fig:F_plot}
+\end{figure}
 
 \end{document} 

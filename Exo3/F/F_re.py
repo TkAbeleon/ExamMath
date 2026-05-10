@@ -34,7 +34,8 @@ plt.title(r'Transformée inverse de $F(s)=\frac{1}{\ln 2 + |s|}$')
 plt.grid(True)
 plt.legend()
 plt.xlim(t_vals[0], t_vals[-1])
-plt.show()
+plt.savefig('F_plot.png')
+# plt.show()
 
 # Affichage de quelques valeurs numériques
 test_t = np.array([0.1, 0.5, 1.0, 2.0, 3.0])
