@@ -1,0 +1,162 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+
+\title{Résolution d’un système de congruences par le théorème des restes chinois}
+\date{}
+\begin{document}
+
+\maketitle
+
+\section*{Système à résoudre}
+On cherche les entiers $x$ vérifiant :
+\[
+\begin{cases}
+x \equiv 3 \pmod{7} \\
+x \equiv 1 \pmod{11} \\
+x \equiv 5 \pmod{13} \\
+x \equiv 15 \pmod{17} \\
+x \equiv 12 \pmod{23}
+\end{cases}
+\]
+Les modules $7, 11, 13, 17, 23$ sont premiers entre eux deux à deux. Le théorème des restes chinois garantit alors une unique solution modulo $M = 7 \times 11 \times 13 \times 17 \times 23$.
+
+\section*{1. Calcul du module global $M$}
+\[
+M = 7 \times 11 \times 13 \times 17 \times 23.
+\]
+Effectuons le produit pas à pas :
+\begin{align*}
+7 \times 11 &= 77,\\
+77 \times 13 &= 1001,\\
+1001 \times 17 &= 17017,\\
+17017 \times 23 &= 391\,391.
+\end{align*}
+Donc
+\[
+\boxed{M = 391\,391}.
+\]
+
+\section*{2. Détermination des $M_i = M / m_i$}
+Pour chaque congruence $x \equiv a_i \pmod{m_i}$, on pose $M_i = \dfrac{M}{m_i}$.
+
+\begin{align*}
+M_1 &= \frac{391\,391}{7} = 55\,913, \\
+M_2 &= \frac{391\,391}{11} = 35\,581, \\
+M_3 &= \frac{391\,391}{13} = 30\,107, \\
+M_4 &= \frac{391\,391}{17} = 23\,023, \\
+M_5 &= \frac{391\,391}{23} = 17\,017.
+\end{align*}
+
+\section*{3. Calcul des inverses modulaires $y_i$}
+Pour chaque $i$, on cherche $y_i$ tel que $M_i \cdot y_i \equiv 1 \pmod{m_i}$.
+
+\subsection*{Pour $i=1$ : $M_1 \equiv 55\,913 \pmod{7}$}
+\[
+55\,913 \div 7 = 7\,987 \times 7 = 55\,909,\quad \text{reste } 4.
+\]
+Donc $M_1 \equiv 4 \pmod{7}$.
+On résout $4y \equiv 1 \pmod{7}$.
+\[
+4 \times 2 = 8 \equiv 1 \pmod{7} \quad\Longrightarrow\quad y_1 = 2.
+\]
+
+\subsection*{Pour $i=2$ : $M_2 \equiv 35\,581 \pmod{11}$}
+\[
+35\,581 \div 11 = 3\,234 \times 11 = 35\,574,\quad \text{reste } 7.
+\]
+Donc $M_2 \equiv 7 \pmod{11}$.
+Résolvons $7y \equiv 1 \pmod{11}$.
+\[
+7 \times 8 = 56 = 5\times 11 + 1 \equiv 1 \pmod{11} \quad\Longrightarrow\quad y_2 = 8.
+\]
+
+\subsection*{Pour $i=3$ : $M_3 \equiv 30\,107 \pmod{13}$}
+\[
+30\,107 \div 13 = 2\,315 \times 13 = 30\,095,\quad \text{reste } 12 \equiv -1 \pmod{13}.
+\]
+Donc $M_3 \equiv -1 \pmod{13}$.
+L’inverse de $-1$ modulo $13$ est $-1$ lui-même car $(-1)\times(-1)=1$.
+Ainsi $y_3 = -1 \equiv 12 \pmod{13}$ ; on prendra $y_3 = 12$.
+
+\subsection*{Pour $i=4$ : $M_4 \equiv 23\,023 \pmod{17}$}
+\[
+23\,023 \div 17 = 1\,354 \times 17 = 23\,018,\quad \text{reste } 5.
+\]
+Donc $M_4 \equiv 5 \pmod{17}$.
+On résout $5y \equiv 1 \pmod{17}$.
+\[
+5 \times 7 = 35 = 2\times 17 + 1 \equiv 1 \pmod{17} \quad\Longrightarrow\quad y_4 = 7.
+\]
+
+\subsection*{Pour $i=5$ : $M_5 \equiv 17\,017 \pmod{23}$}
+\[
+17\,017 \div 23 = 739 \times 23 = 16\,997,\quad \text{reste } 20 \equiv -3 \pmod{23}.
+\]
+Donc $M_5 \equiv -3 \pmod{23}$.
+On cherche $y$ tel que $(-3)y \equiv 1 \pmod{23}$, soit $3y \equiv -1 \equiv 22 \pmod{23}$.
+\[
+3 \times 15 = 45 = 1\times 23 + 22 \equiv 22 \pmod{23}.
+\]
+Donc $y_5 = 15$ (car $3\times15=45 \equiv 22 \pmod{23}$).
+(Vérification : $(-3)\times15 = -45 = -2\times23 + 1 \equiv 1 \pmod{23}$.)
+
+\section*{4. Construction de la solution}
+La solution est donnée par
+\[
+x = \sum_{i=1}^{5} a_i \, M_i \, y_i \pmod{M}.
+\]
+
+Calculons chaque terme :
+\begin{align*}
+a_1 M_1 y_1 &= 3 \times 55\,913 \times 2 = 335\,478, \\
+a_2 M_2 y_2 &= 1 \times 35\,581 \times 8 = 284\,648, \\
+a_3 M_3 y_3 &= 5 \times 30\,107 \times 12 = 1\,806\,420, \\
+a_4 M_4 y_4 &= 15 \times 23\,023 \times 7 = 2\,417\,415, \\
+a_5 M_5 y_5 &= 12 \times 17\,017 \times 15 = 3\,063\,060.
+\end{align*}
+
+Somme :
+\[
+S = 335\,478 + 284\,648 + 1\,806\,420 + 2\,417\,415 + 3\,063\,060 = 7\,907\,021.
+\]
+
+\section*{5. Réduction modulo $M$}
+On calcule le reste de $S$ modulo $391\,391$ :
+\[
+7\,907\,021 \div 391\,391 \approx 20.2,\quad
+391\,391 \times 20 = 7\,827\,820.
+\]
+\[
+\text{Reste} = 7\,907\,021 - 7\,827\,820 = 79\,201.
+\]
+Ainsi
+\[
+\boxed{x \equiv 79\,201 \pmod{391\,391}}.
+\]
+
+La plus petite solution positive est $79\,201$.
+
+\section*{6. Vérification}
+On vérifie chaque congruence :
+\begin{align*}
+79\,201 \bmod 7   &= 3, \quad (\text{car } 7 \times 11\,314 = 79\,198,\;\; 79\,201-79\,198 = 3),\\
+79\,201 \bmod 11  &= 1, \quad (11 \times 7\,200 = 79\,200,\;\; \text{reste }1),\\
+79\,201 \bmod 13  &= 5, \quad (13 \times 6\,092 = 79\,196,\;\; \text{reste }5),\\
+79\,201 \bmod 17  &= 15, \quad (17 \times 4\,658 = 79\,186,\;\; \text{reste }15),\\
+79\,201 \bmod 23  &= 12, \quad (23 \times 3\,443 = 79\,189,\;\; 79\,201-79\,189 = 12).
+\end{align*}
+Toutes les conditions sont satisfaites.
+
+\section*{7. Ensemble des solutions}
+L’ensemble complet des entiers $x$ solutions est
+\[
+\{ \, 79\,201 + 391\,391\,k \mid k \in \mathbb{Z} \, \}.
+\]
+
+\end{document} 

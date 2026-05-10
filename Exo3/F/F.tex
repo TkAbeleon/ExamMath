@@ -1,0 +1,127 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{Transformée de Laplace inverse de $F(s)=\dfrac{1}{\ln 2 + |s|}$}
+\author{Votre Nom}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+On cherche la transformée de Laplace inverse de la fonction
+\[
+F(s) = \frac{1}{\ln 2 + |s|},
+\]
+en ayant recours à des \textbf{fonctions spéciales}.  
+La présence de la valeur absolue $|s|$ empêche de considérer la transformée de Laplace unilatérale classique (où $F(s)$ doit être analytique dans un demi-plan). On se place donc dans le cadre de la \textbf{transformée de Laplace bilatérale} (ou transformée de Fourier), en évaluant $F$ sur l'axe imaginaire pur $s = i\omega$.
+
+\section{Inversion via la transformée bilatérale}
+La formule d'inversion bilatérale s'écrit
+\[
+f(t) = \frac{1}{2\pi i} \int_{-i\infty}^{i\infty} \frac{e^{st}}{\ln 2 + |s|} \, ds .
+\]
+En posant $s = i\omega$, on a $ds = i\,d\omega$ et $|s| = |\omega|$. Alors
+\[
+f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \frac{e^{i\omega t}}{\ln 2 + |\omega|} \, d\omega .
+\]
+
+\section{Simplification par parité}
+Le dénominateur $\ln 2 + |\omega|$ est une fonction paire de $\omega$. La partie imaginaire de l'intégrande (impaire) s'annule, et il reste la partie réelle paire :
+\[
+f(t) = \frac{1}{\pi} \int_{0}^{\infty} \frac{\cos(\omega t)}{\ln 2 + \omega} \, d\omega .
+\]
+
+\section{Changement de variable et apparition des fonctions spéciales}
+Posons $a = \ln 2$ et effectuons $u = \omega + a$. L'intégrale devient
+\begin{align*}
+f(t) &= \frac{1}{\pi} \int_{a}^{\infty} \frac{\cos\big((u - a)t\big)}{u} \, du \\
+     &= \frac{1}{\pi} \left[ \cos(at) \int_{a}^{\infty} \frac{\cos(ut)}{u} \, du 
+                      + \sin(at) \int_{a}^{\infty} \frac{\sin(ut)}{u} \, du \right].
+\end{align*}
+
+\subsection{Fonctions intégrales trigonométriques}
+On introduit les fonctions spéciales suivantes :
+\begin{itemize}[label=--]
+    \item \textbf{Cosinus intégral} : $\displaystyle \operatorname{Ci}(x) = -\int_{x}^{\infty} \frac{\cos v}{v} \, dv$,
+    \item \textbf{Sinus intégral} : $\displaystyle \operatorname{Si}(x) = \int_{0}^{x} \frac{\sin v}{v} \, dv$, avec
+    $\displaystyle \int_{0}^{\infty} \frac{\sin v}{v} \, dv = \frac{\pi}{2}$.
+\end{itemize}
+On rappelle aussi la fonction sinus intégral complémentaire :
+\[
+\operatorname{si}(x) = -\int_{x}^{\infty} \frac{\sin v}{v} \, dv = \operatorname{Si}(x) - \frac{\pi}{2}.
+\]
+
+\subsection{Application aux intégrales}
+Pour $t > 0$, on effectue le changement $v = ut$ dans chaque intégrale :
+\begin{align*}
+\int_{a}^{\infty} \frac{\cos(ut)}{u} \, du &= \int_{at}^{\infty} \frac{\cos v}{v} \, dv = -\operatorname{Ci}(at), \\
+\int_{a}^{\infty} \frac{\sin(ut)}{u} \, du &= \int_{at}^{\infty} \frac{\sin v}{v} \, dv = \frac{\pi}{2} - \operatorname{Si}(at) = -\operatorname{si}(at).
+\end{align*}
+
+\section{Expression de $f(t)$}
+En reportant ces résultats, on obtient pour $t > 0$ :
+\[
+f(t) = \frac{1}{\pi}\left[ -\cos(at)\operatorname{Ci}(at) + \sin(at)\left( \frac{\pi}{2} - \operatorname{Si}(at) \right) \right].
+\]
+Puisque la fonction originale $F(s)$ est réelle et paire, sa transformée inverse $f(t)$ est également réelle et paire. On généralise donc à tout $t$ réel en remplaçant $t$ par $|t|$ et en rétablissant $a = \ln 2$ :
+\[
+\boxed{ f(t) = \frac{1}{\pi}\left[ -\cos(t \ln 2)\,\operatorname{Ci}\!\big(|t|\ln 2\big) 
+        + \sin(|t|\ln 2)\left( \frac{\pi}{2} - \operatorname{Si}\!\big(|t|\ln 2\big) \right) \right] }.
+\]
+
+\textbf{Forme alternative} (avec $\operatorname{si}$) :
+\[
+f(t) = -\frac{1}{\pi}\Bigl[ \cos(t \ln 2)\,\operatorname{Ci}\!\big(|t|\ln 2\bigr) 
+        + \sin(|t|\ln 2)\,\operatorname{si}\!\big(|t|\ln 2\bigr) \Bigr].
+\]
+
+\section{Développement en série entière du sinus intégral}
+La fonction $\operatorname{Si}(x)$ peut être exprimée sous forme de développement en série entière, ce qui permet des calculs numériques approchés. Voici la démonstration de cette série.
+
+\subsection{Étape 1 : Série de Maclaurin de $\sin t$}
+Pour tout réel $t$,
+\[
+\sin t = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} \, t^{2n+1}.
+\]
+
+\subsection{Étape 2 : Intégrande $\dfrac{\sin t}{t}$}
+En divisant par $t$ (prolongée par continuité en $0$),
+\[
+\frac{\sin t}{t} = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} \, t^{2n}, \qquad t \neq 0.
+\]
+
+\subsection{Étape 3 : Intégration terme à terme}
+La série a un rayon de convergence infini, donc l'intégration entre $0$ et $x$ peut s'effectuer terme à terme :
+\[
+\operatorname{Si}(x) = \int_0^x \frac{\sin t}{t} \, dt 
+= \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} \int_0^x t^{2n} \, dt.
+\]
+
+\subsection{Étape 4 : Calcul de l'intégrale}
+Pour chaque terme,
+\[
+\int_0^x t^{2n} \, dt = \frac{x^{2n+1}}{2n+1}.
+\]
+
+\subsection{Étape 5 : Expression finale}
+D'où la série entière de $\operatorname{Si}$ :
+\[
+\boxed{ \operatorname{Si}(x) = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1) \, (2n+1)!} \, x^{2n+1} }.
+\]
+Cette série est valable pour tout $x$ réel (et même complexe).
+
+\section{Conclusion}
+La transformée de Laplace inverse cherchée s'exprime à l'aide des fonctions spéciales \textbf{cosinus intégral} $\operatorname{Ci}$ et \textbf{sinus intégral} $\operatorname{Si}$ (ou $\operatorname{si}$).  
+Aucune formule explicite utilisant uniquement des fonctions élémentaires n'existe. Le développement en série entière de $\operatorname{Si}$ (et celui analogue de $\operatorname{Ci}$) permet néanmoins d'en obtenir des approximations numériques.
+
+\end{document} 

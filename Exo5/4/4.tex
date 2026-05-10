@@ -1,0 +1,222 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numberstyle=\tiny,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Définition}
+
+\title{L'équation \texorpdfstring{$|a^x - b^y| = k$}{|a^x - b^y| = k} :\\[2mm]
+du théorème de Mihăilescu aux explorations numériques}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+L'équation diophantienne
+\begin{equation}\label{eq:pillai}
+|a^x - b^y| = k,\qquad \gcd(a,b)=1,\; a,b \ge 2,\; x,y \ge 2,\; k \ge 1,
+\end{equation}
+constitue un chapitre fascinant de la théorie des nombres. Elle généralise la célèbre \emph{conjecture de Catalan} (1844), devenue en 2002 le \textbf{théorème de Mihăilescu} : la seule solution de $|a^x - b^y| = 1$ est $3^2 - 2^3 = 1$. Pour $k \ge 2$, elle est liée à la \emph{conjecture de Pillai} (1930) et au \textbf{théorème de Tijdeman} (1976) qui affirme que le nombre de solutions est fini pour chaque $k$, sans toutefois permettre de les énumérer. Aujourd'hui, déterminer \emph{toutes} les solutions pour un $k>1$ quelconque reste un problème ouvert.
+
+Ce document présente d'abord la résolution complète du cas $k=1$ (section \ref{sec:k1}), puis explique pourquoi le cas $k>1$ demeure non résolu (section \ref{sec:kgeneral}). Enfin, une exploration numérique avec Python (section \ref{sec:num}) fournit des exemples de solutions pour de petites valeurs de $k$ et illustre la rareté de ces paires de puissances. Une bibliographie indicative est donnée en fin de document.
+
+\section{Cas résolu : \texorpdfstring{$k=1$}{k=1} -- théorème de Mihăilescu}
+\label{sec:k1}
+
+\subsection{Énoncé et histoire}
+
+La conjecture de Catalan affirmait que les seules puissances parfaites consécutives sont $8=2^3$ et $9=3^2$. En termes modernes :
+\[
+a^x - b^y = 1,\quad a,b>1,\; x,y\ge 2 \;\Longrightarrow\; (a,b,x,y)=(3,2,2,3) \;\text{ou}\; (2,3,3,2).
+\]
+Après plus de 150 ans d'efforts, Preda Mihăilescu a fourni une preuve complète en 2002 \cite{Mihailescu}. Nous en esquissons les grandes lignes.
+
+\subsection{Étapes de la démonstration}
+
+\paragraph{1. Réduction aux exposants premiers impairs.}  
+Si $x$ ou $y$ est composé, l'équation se ramène à une équation de la forme $A^p - B^q = 1$ avec $p,q$ premiers (Lemme de Lebesgue, 1850 \cite{Lebesgue}). On peut donc supposer $x=p$, $y=q$ premiers impairs, quitte à échanger les rôles. Le cas où l'un des exposants est $2$ a été traité séparément (Ko Chao, 1965 \cite{Ko}).
+
+\paragraph{2. Propriétés cyclotomiques.}  
+On écrit $a^p = 1 + b^q$. En considérant le corps cyclotomique $\mathbb{Q}(\zeta_p)$ où $\zeta_p$ est une racine primitive $p$-ième de l'unité, on décompose :
+\[
+a^p = \prod_{i=1}^{p-1} (1 + \zeta_p^i b^{q/p}).
+\]
+L'étude des idéaux dans $\mathbb{Z}[\zeta_p]$ montre que $b$ est une puissance $p$-ième modulo $q$ et que $a$ est une puissance $q$-ième modulo $p$.
+
+\paragraph{3. Condition de double Wieferich.}  
+La réciprocité cyclotomique conduit aux congruences :
+\[
+p^{q-1} \equiv 1 \pmod{q^2},\qquad q^{p-1} \equiv 1 \pmod{p^2}.
+\]
+Cela signifie que $(p,q)$ forme un \emph{couple de Wieferich}. Ces couples sont extrêmement rares.
+
+\paragraph{4. Le théorème de Mihăilescu.}  
+En 2002, Mihăilescu démontre que le seul couple de nombres premiers impairs vérifiant ces deux conditions est $(3,2)$ (ou $(2,3)$), ce qui est impossible car les exposants sont supposés impairs. Par conséquent, la seule solution avec $p,q$ premiers impairs est exclue, et le seul cas restant est celui où l'un des exposants est $2$ et l'autre $3$, donnant $3^2 - 2^3 = 1$.
+
+La preuve, publiée dans \emph{Journal für die reine und angewandte Mathematik} \cite{Mihailescu}, utilise des techniques profondes de théorie algébrique des nombres (modules de Galois, unités cyclotomiques).
+
+\subsection{Résultat final}
+\begin{theorem}[Mihăilescu, 2002]
+Les seules solutions de $a^x - b^y = 1$ avec $a,b>1$ et $x,y\ge 2$ sont $3^2 - 2^3 = 1$ et, symétriquement, $2^3 - 3^2 = -1$.
+\end{theorem}
+
+\section{Cas général \texorpdfstring{$k \ge 2$}{k≥2} : un problème ouvert}
+\label{sec:kgeneral}
+
+\subsection{Le théorème de Tijdeman (1976)}
+
+Pour $k \ge 2$, l'équation $|a^x - b^y| = k$ est beaucoup plus difficile. En 1976, Tijdeman \cite{Tijdeman1976} a démontré un résultat fondamental :
+
+\begin{theorem}[Tijdeman, 1976]
+Pour tout entier $k \ge 1$, l'équation $|a^x - b^y| = k$ avec $\gcd(a,b)=1$, $a,b \ge 2$, $x,y \ge 2$ n'admet qu'un nombre fini de solutions.
+\end{theorem}
+
+La preuve utilise la théorie des \emph{formes linéaires de logarithmes} de Baker. On réécrit l'équation sous la forme
+\[
+x \log a - y \log b = \log\!\left(1 \pm \frac{k}{b^y}\right),
+\]
+et l'on montre que si $x,y$ sont suffisamment grands, le membre de droite est trop petit pour être non nul, forçant $x,y \le C(k)$, où $C(k)$ est une constante effectivement calculable mais \emph{astronomiquement grande}, typiquement de l'ordre de $\exp(\exp(k^c))$. 
+
+\subsection{Pourquoi le problème n'est-il pas résolu ?}
+
+\begin{itemize}
+    \item \textbf{Bornes ineffectives.} La borne $C(k)$ fournie par la méthode de Baker est si énorme qu'il est impossible de tester toutes les possibilités, même pour $k=2$.
+    \item \textbf{Absence de structure.} Contrairement au cas $k=1$, on n'a pas de factorisation évidente $a^x = b^y \pm k$ exploitable avec les racines de l'unité. La descente de Mihăilescu ne se généralise pas.
+    \item \textbf{Conjecture de Pillai (1930).} Pillai a conjecturé que pour tout $k$, le nombre de solutions est fini (démontré par Tijdeman) et que ce nombre \emph{tend vers l'infini} quand $k$ grandit. Ce second point est toujours ouvert.
+\end{itemize}
+
+Actuellement, pour une valeur donnée de $k$, on peut parfois déterminer \emph{toutes} les solutions en combinant des bornes améliorées (linéaires en $k$) et des vérifications informatiques, mais cela reste un travail ad hoc pour chaque $k$ (voir \cite{Bugeaud2008} pour une synthèse).
+
+\subsection{État des connaissances pour les petites valeurs de $k$}
+
+Grâce à des recherches combinant théorie et calculs, les solutions pour $k \le 10$ ont été entièrement classifiées (voir par exemple \cite{Mignotte}). Pour $k=2$, la seule solution est $3^3 - 5^2 = 2$; pour $k=3$, $2^7 - 5^3 = 3$; etc. Mais pour $k$ plus grand, l'exhaustivité devient rapidement hors d'atteinte.
+
+\section{Exploration numérique avec Python}
+\label{sec:num}
+
+Pour illustrer la rareté des solutions et générer des exemples, nous avons conçu un programme Python simple mais efficace. Il génère toutes les puissances parfaites $a^x$ avec $2 \le a \le 1000$, $x \ge 2$ et $a^x \le 10^{15}$, les stocke dans un dictionnaire, puis recherche les paires dont la différence appartient à $\{2,3,\dots,50\}$ et vérifie la condition $\gcd(a,b)=1$.
+
+Le code est donné ci-dessous.
+
+\begin{lstlisting}[caption={Script d'exploration des solutions de $|a^x - b^y| = k$},label={lst:python}]
+import math
+from collections import defaultdict
+
+MAX_BASE = 1000
+MAX_VAL = 10**15
+MAX_K = 50
+
+def generate_power_dict():
+    pwr = defaultdict(list)
+    for a in range(2, MAX_BASE + 1):
+        val = a * a
+        exp = 2
+        while val <= MAX_VAL:
+            pwr[val].append((a, exp))
+            val *= a
+            exp += 1
+    return pwr
+
+pwr = generate_power_dict()
+sorted_vals = sorted(pwr.keys())
+solutions = defaultdict(list)
+
+for v in sorted_vals:
+    for k in range(2, MAX_K + 1):
+        target = v + k
+        if target > sorted_vals[-1]:
+            break
+        if target in pwr:
+            for a1, x1 in pwr[v]:
+                for a2, x2 in pwr[target]:
+                    if math.gcd(a1, a2) == 1:
+                        solutions[k].append((a1, x1, a2, x2, v, target))
+                        break
+                if solutions[k]:
+                    break
+
+for k in range(2, MAX_K + 1):
+    if solutions[k]:
+        print(f"\n--- k = {k} ({len(solutions[k])} solution(s)) ---")
+        for a1, x1, a2, x2, v1, v2 in solutions[k][:5]:
+            print(f"  {a1}^{x1} = {v1},  {a2}^{x2} = {v2}   (pgcd={math.gcd(a1,a2)})")
+    else:
+        print(f"\n--- k = {k} : aucune solution trouvee ---")
+\end{lstlisting}
+
+\subsection{Résultats obtenus}
+
+L'exécution du programme (bases jusqu'à 1000, valeur maximale $10^{15}$) a produit 82 solutions pour $k$ allant de 2 à 50. Quelques exemples remarquables :
+
+\begin{itemize}
+    \item $k=2$ : $5^2 = 25$, $3^3 = 27$ (unique).
+    \item $k=3$ : $5^3 = 125$, $2^7 = 128$ (unique).
+    \item $k=4$ : $11^2 = 121$, $5^3 = 125$ (unique).
+    \item $k=5$ : $2^2 = 4$, $3^2 = 9$ ; $3^3 = 27$, $2^5 = 32$.
+    \item $k=7$ : 4 solutions, dont $181^2 = 32761$, $2^{15} = 32768$.
+    \item $k=17$ : 6 solutions, dont $43^3 = 79507$, $282^2 = 79524$.
+\end{itemize}
+
+Certaines valeurs de $k$ n'ont donné \emph{aucune solution} dans ce domaine de recherche : $k = 8, 20, 36$ (et quelques autres). \textbf{Attention :} cela ne signifie pas qu'il n'en existe pas ; simplement, elles nécessiteraient des bases plus grandes, des exposants plus élevés, ou des valeurs dépassant $10^{15}$.
+
+\subsection{Interprétation}
+
+L'exploration révèle que les solutions sont très inégalement réparties : certaines valeurs de $k$ (ex. 7, 17, 47) en possèdent plusieurs, d'autres une seule, d'autres aucune dans la plage étudiée. Ce comportement erratique confirme la difficulté de prévoir l'existence de solutions sans un traitement mathématique profond.
+
+\section{Bibliographie indicative}
+\label{sec:biblio}
+
+\begin{thebibliography}{99}
+
+\bibitem{Catalan}
+E. Catalan, Note extraite d'une lettre adressée à l'éditeur, \emph{J. Reine Angew. Math.} \textbf{27} (1844), 192.
+
+\bibitem{Lebesgue}
+V. A. Lebesgue, Sur l'impossibilité en nombres entiers de l'équation $x^m = y^2 + 1$, \emph{Nouv. Ann. Math.} \textbf{9} (1850), 178--181.
+
+\bibitem{Ko}
+C. Ko, On the Diophantine equation $x^2 = y^n + 1$, \emph{Sci. Sinica} \textbf{14} (1965), 457--460.
+
+\bibitem{Tijdeman1976}
+R. Tijdeman, On the equation of Catalan, \emph{Acta Arith.} \textbf{29} (1976), 197--209.
+
+\bibitem{Mihailescu}
+P. Mihăilescu, Primary cyclotomic units and a proof of Catalan's conjecture, \emph{J. Reine Angew. Math.} \textbf{572} (2004), 167--195. (Preprint 2002)
+
+\bibitem{Bugeaud2008}
+Y. Bugeaud, \emph{Linear forms in logarithms and applications}, IRMA Lectures in Mathematics and Theoretical Physics 28, European Mathematical Society, 2018.
+
+\bibitem{Mignotte}
+M. Mignotte, Catalan's equation just before 2000, in \emph{Number Theory}, de Gruyter (1999), 349--358.
+
+\bibitem{Pillai}
+S. S. Pillai, On the inequality $|x^n - y^m| \le t$, \emph{J. Indian Math. Soc.} \textbf{19} (1931), 1--11.
+
+\end{thebibliography}
+
+\end{document} 

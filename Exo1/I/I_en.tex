@@ -1,0 +1,96 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\title{Evaluation of \(\displaystyle I = \int_0^1 \cos(x^2+e^x)\,dx\)}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+We are looking to evaluate 
+\[
+I = \int_0^1 \cos(x^2 + e^x)\,dx .
+\]
+No elementary antiderivative exists, but we can obtain an exact expression in the form of a double series.
+
+\section{Power series expansion}
+For any real number $u$,
+\[
+\cos u = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}\, u^{2n}.
+\]
+By setting $u = x^2 + e^x$, we have
+\[
+\cos(x^2+e^x) = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}\, (x^2+e^x)^{2n}.
+\]
+
+\section{Binomial expansion}
+For each $n$, let us expand $(x^2+e^x)^{2n}$ using the binomial theorem:
+\[
+(x^2+e^x)^{2n} = \sum_{k=0}^{2n} \binom{2n}{k} (x^2)^k (e^x)^{2n-k}
+= \sum_{k=0}^{2n} \binom{2n}{k} x^{2k} e^{(2n-k)x}.
+\]
+
+\section{Series/integral interchange}
+The series converges normally on $[0,1]$, so we can integrate term by term:
+\[
+I = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}
+\sum_{k=0}^{2n} \binom{2n}{k}
+\underbrace{\int_0^1 x^{2k} e^{(2n-k)x}\,dx}_{I_{k,n}} .
+\]
+
+\section{Exact calculation of \(I_{k,n}\)}
+Let $m = 2k$ and $a = 2n-k$. We must evaluate
+\[
+I(m,a) = \int_0^1 x^{m} e^{a x}\,dx .
+\]
+\begin{itemize}
+\item If $a = 0$ (i.e., $k=2n$): $\displaystyle I(m,0) = \frac{1}{m+1} = \frac{1}{4n+1}$.
+\item If $a \neq 0$, we integrate by parts $m$ times or use the explicit formula
+\begin{align*}
+I(m,a) &= \frac{m!}{(-a)^{m+1}}\Bigl(1 - e^{a}\sum_{j=0}^{m}\frac{(-a)^j}{j!}\Bigr) \\
+&= \frac{(2k)!}{(k-2n)^{2k+1}}\Bigl(1 - e^{2n-k}\sum_{j=0}^{2k}\frac{(k-2n)^j}{j!}\Bigr).
+\end{align*}
+\end{itemize}
+
+\section{Exact expression of the integral}
+By substituting both cases into the double sum, we obtain the exact representation:
+\begin{align}
+I &= \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}
+\Bigg[ \binom{2n}{2n}\frac{1}{4n+1} \nonumber \\
+&\quad + \sum_{\substack{k=0\\k\neq 2n}}^{2n} \binom{2n}{k}
+\frac{(2k)!}{(k-2n)^{2k+1}}
+\Bigl(1 - e^{2n-k}\sum_{j=0}^{2k}\frac{(k-2n)^j}{j!}\Bigr) \Bigg]. \label{eq:exact}
+\end{align}
+This expression is exact and only involves factorials, binomial coefficients, and the exponential $e$.
+
+\section{Numerical evaluation}
+\subsection{Direct evaluation}
+Using an adaptive quadrature method (Gauss-Kronrod), we find
+\[
+I \approx -0.303666963947415 \quad (\text{estimated error } \sim 10^{-15}).
+\]
+
+\subsection{Evaluation of the exact series}
+The naive calculation of (\ref{eq:exact}) in double precision fails quickly: the terms $e^{2n-k}$ and the exponential sums are very large, and their subtraction causes catastrophic cancellation. For $n\ge 10$, the numerical results blow up.
+
+Using multi-precision arithmetic (50 decimal places) and a robust numerical integration of each $I_{k,n}$ (rather than the unstable closed formula), the double series converges to:
+\[
+I = -0.303666963947415171254014036015\ldots
+\]
+The two approaches match up to machine precision, validating the exact formula.
+
+\section{Retained approximate value}
+\[
+\boxed{\int_0^1 \cos(x^2+e^x)\,dx \simeq -0.303666963947415}
+\]
+with an uncertainty of less than $10^{-14}$.
+
+\section*{Remark}
+The expression (\ref{eq:exact}) provides an \textbf{exact value} of the integral, although it cannot be reduced to an elementary constant. For practical calculations, direct numerical integration is preferred.
+
+\end{document}

@@ -1,0 +1,492 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+
+\title{Résolution détaillée d'une congruence linéaire}
+\author{Méthode de la division euclidienne et de l'algorithme d'Euclide étendu}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Énoncé}
+Résoudre dans $\mathbb{Z}$ la congruence linéaire suivante :
+\begin{equation}\label{eq:congruence}
+750005\,x \equiv 1500010 \pmod{9876545}.
+\end{equation}
+
+\section*{Rappel de la méthode générale}
+
+Soit une congruence $ax \equiv b \pmod{n}$.
+
+\begin{enumerate}
+    \item \textbf{Calcul du PGCD.} Calculer $d = \operatorname{PGCD}(a, n)$.
+    \item \textbf{Condition de résolubilité.} Vérifier que $d$ divise $b$, c'est-à-dire $d \mid b$.
+          Si ce n'est pas le cas, il n'y a pas de solution.
+    \item \textbf{Simplification.} Si $d \mid b$, on divise les trois termes $a$, $b$ et $n$ par $d$ :
+          \[
+          \frac{a}{d}\,x \equiv \frac{b}{d} \pmod{\frac{n}{d}}.
+          \]
+          On pose $a' = \frac{a}{d}$, $b' = \frac{b}{d}$, $n' = \frac{n}{d}$.
+          Les entiers $a'$ et $n'$ sont maintenant premiers entre eux.
+    \item \textbf{Résolution de la congruence simplifiée.}
+          Comme $\operatorname{PGCD}(a', n') = 1$, l'entier $a'$ possède un inverse modulo $n'$.
+          On note $u$ cet inverse, c'est-à-dire l'entier tel que $a'u \equiv 1 \pmod{n'}$.
+          La solution unique modulo $n'$ est alors :
+          \[
+          x_0 \equiv b' \times u \pmod{n'}.
+          \]
+    \item \textbf{Solutions de la congruence initiale.}
+          Les solutions modulo $n$ sont :
+          \[
+          x \equiv x_0 + k \times n' \pmod{n}, \qquad k \in \{0,\,1,\,2,\,\dots,\,d-1\}.
+          \]
+          Il y a exactement $d$ solutions distinctes modulo $n$.
+\end{enumerate}
+
+\newpage
+
+\section*{Application à l'exercice}
+
+\subsection*{Étape 1 : Calcul du $\operatorname{PGCD}(a, n)$}
+
+On pose $a = 750005$ et $n = 9876545$.
+
+\medskip
+\noindent
+\textbf{Division 1 :} Division de $n$ par $a$.
+\[
+\begin{aligned}
+9876545 &= 750005 \times 13 + r_1 \\
+r_1    &= 9876545 - 750005 \times 13 \\
+       &= 9876545 - 9750065 \\
+       &= 126480.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{9876545 = 750005 \times 13 + 126480}.
+\]
+
+\noindent
+\textbf{Division 2 :} Division de $750005$ par $126480$.
+\[
+\begin{aligned}
+750005 &= 126480 \times 5 + r_2 \\
+r_2    &= 750005 - 126480 \times 5 \\
+       &= 750005 - 632400 \\
+       &= 117605.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{750005 = 126480 \times 5 + 117605}.
+\]
+
+\noindent
+\textbf{Division 3 :} Division de $126480$ par $117605$.
+\[
+\begin{aligned}
+126480 &= 117605 \times 1 + r_3 \\
+r_3    &= 126480 - 117605 \times 1 \\
+       &= 126480 - 117605 \\
+       &= 8875.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{126480 = 117605 \times 1 + 8875}.
+\]
+
+\noindent
+\textbf{Division 4 :} Division de $117605$ par $8875$.
+\[
+\begin{aligned}
+117605 &= 8875 \times 13 + r_4 \\
+r_4    &= 117605 - 8875 \times 13 \\
+       &= 117605 - 115375 \\
+       &= 2230.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{117605 = 8875 \times 13 + 2230}.
+\]
+
+\noindent
+\textbf{Division 5 :} Division de $8875$ par $2230$.
+\[
+\begin{aligned}
+8875 &= 2230 \times 3 + r_5 \\
+r_5  &= 8875 - 2230 \times 3 \\
+     &= 8875 - 6690 \\
+     &= 2185.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{8875 = 2230 \times 3 + 2185}.
+\]
+
+\noindent
+\textbf{Division 6 :} Division de $2230$ par $2185$.
+\[
+\begin{aligned}
+2230 &= 2185 \times 1 + r_6 \\
+r_6  &= 2230 - 2185 \times 1 \\
+     &= 2230 - 2185 \\
+     &= 45.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{2230 = 2185 \times 1 + 45}.
+\]
+
+\noindent
+\textbf{Division 7 :} Division de $2185$ par $45$.
+\[
+\begin{aligned}
+2185 &= 45 \times 48 + r_7 \\
+r_7  &= 2185 - 45 \times 48 \\
+     &= 2185 - 2160 \\
+     &= 25.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{2185 = 45 \times 48 + 25}.
+\]
+
+\noindent
+\textbf{Division 8 :} Division de $45$ par $25$.
+\[
+\begin{aligned}
+45   &= 25 \times 1 + r_8 \\
+r_8  &= 45 - 25 \times 1 \\
+     &= 45 - 25 \\
+     &= 20.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{45 = 25 \times 1 + 20}.
+\]
+
+\noindent
+\textbf{Division 9 :} Division de $25$ par $20$.
+\[
+\begin{aligned}
+25   &= 20 \times 1 + r_9 \\
+r_9  &= 25 - 20 \times 1 \\
+     &= 25 - 20 \\
+     &= 5.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{25 = 20 \times 1 + 5}.
+\]
+
+\noindent
+\textbf{Division 10 :} Division de $20$ par $5$.
+\[
+\begin{aligned}
+20   &= 5 \times 4 + r_{10} \\
+r_{10} &= 20 - 5 \times 4 \\
+       &= 20 - 20 \\
+       &= 0.
+\end{aligned}
+\]
+Donc :
+\[
+\boxed{20 = 5 \times 4 + 0}.
+\]
+
+\medskip
+Le dernier reste \textbf{non nul} est $5$. Par conséquent :
+\[
+\boxed{d = \operatorname{PGCD}(750005,\,9876545) = 5}.
+\]
+
+\medskip
+\textbf{Récapitulatif complet de l'algorithme d'Euclide :}
+\[
+\begin{array}{rcl}
+9876545 &=& 750005 \times 13 + 126480 \\[2pt]
+750005  &=& 126480 \times 5 + 117605 \\[2pt]
+126480  &=& 117605 \times 1 + 8875 \\[2pt]
+117605  &=& 8875 \times 13 + 2230 \\[2pt]
+8875    &=& 2230 \times 3 + 2185 \\[2pt]
+2230    &=& 2185 \times 1 + 45 \\[2pt]
+2185    &=& 45 \times 48 + 25 \\[2pt]
+45      &=& 25 \times 1 + 20 \\[2pt]
+25      &=& 20 \times 1 + \textcolor{red}{5} \\[2pt]
+20      &=& 5 \times 4 + 0
+\end{array}
+\]
+
+\subsection*{Étape 2 : Vérification de la condition de résolubilité}
+
+La congruence $ax \equiv b \pmod{n}$ admet des solutions si et seulement si $d \mid b$.
+
+Ici $b = 1500010$ et $d = 5$. Effectuons la division :
+\[
+1500010 \div 5 = 300002.
+\]
+Le quotient est un entier, donc le reste est nul. Ainsi :
+\[
+\boxed{5 \mid 1500010}.
+\]
+La condition est vérifiée. Il existe donc exactement $d = 5$ solutions distinctes modulo $n = 9876545$.
+
+\subsection*{Étape 3 : Simplification de l'équation}
+
+On divise les trois termes de la congruence par $d = 5$ :
+
+\begin{itemize}
+    \item $a' = \dfrac{a}{d} = \dfrac{750005}{5} = 150001$,
+    \item $b' = \dfrac{b}{d} = \dfrac{1500010}{5} = 300002$,
+    \item $n' = \dfrac{n}{d} = \dfrac{9876545}{5} = 1975309$.
+\end{itemize}
+
+On obtient la congruence simplifiée :
+\begin{equation}\label{eq:congruence_simplifiee}
+\boxed{150001\,x \equiv 300002 \pmod{1975309}}.
+\end{equation}
+
+Puisque l'on a divisé par le PGCD, les entiers $150001$ et $1975309$ sont premiers entre eux :
+\[
+\operatorname{PGCD}(150001,\,1975309) = 1.
+\]
+Ceci garantit l'existence et l'unicité d'un inverse de $150001$ modulo $1975309$, et donc l'existence d'une unique solution modulo $1975309$.
+
+\subsection*{Étape 4 : Recherche de la solution particulière}
+
+On doit résoudre $150001\,x \equiv 300002 \pmod{1975309}$.
+
+\subsubsection*{Première méthode : observation directe}
+On remarque que $300002 = 2 \times 150001$. En effet :
+\[
+2 \times 150001 = 300002.
+\]
+Par conséquent, en choisissant $x = 2$, on a directement :
+\[
+150001 \times 2 = 300002 \equiv 300002 \pmod{1975309}.
+\]
+Ainsi, une solution particulière est :
+\[
+\boxed{x_0 \equiv 2 \pmod{1975309}}.
+\]
+
+\subsubsection*{Deuxième méthode : algorithme d'Euclide étendu (identité de Bézout)}
+On cherche deux entiers $u$ et $v$ tels que :
+\[
+150001\,u + 1975309\,v = 1.
+\]
+L'entier $u$ sera alors l'inverse de $150001$ modulo $1975309$, c'est-à-dire :
+\[
+u \equiv (150001)^{-1} \pmod{1975309}.
+\]
+
+\medskip
+\textbf{Descente (algorithme d'Euclide) :}
+\[
+\begin{aligned}
+1975309 &= 150001 \times 13 + 25276, \qquad &25276 &= 1975309 - 150001 \times 13 \\[2pt]
+150001  &= 25276 \times 5 + 23625,         \qquad &23625 &= 150001 - 25276 \times 5 \\[2pt]
+25276   &= 23625 \times 1 + 1651,          \qquad &1651  &= 25276 - 23625 \times 1 \\[2pt]
+23625   &= 1651 \times 14 + 511,           \qquad &511   &= 23625 - 1651 \times 14 \\[2pt]
+1651    &= 511 \times 3 + 118,             \qquad &118   &= 1651 - 511 \times 3 \\[2pt]
+511     &= 118 \times 4 + 39,              \qquad &39    &= 511 - 118 \times 4 \\[2pt]
+118     &= 39 \times 3 + 1,                \qquad &\mathbf{1}    &= 118 - 39 \times 3.
+\end{aligned}
+\]
+
+\medskip
+\textbf{Remontée (expression de 1 comme combinaison linéaire) :}
+
+\begin{enumerate}
+    \item $1 = 118 - 39 \times 3$.
+    \item En substituant $39 = 511 - 118 \times 4$ :
+          \[
+          \begin{aligned}
+          1 &= 118 - (511 - 118 \times 4) \times 3 \\
+            &= 118 - 511 \times 3 + 118 \times 12 \\
+            &= 118 \times 13 - 511 \times 3.
+          \end{aligned}
+          \]
+    \item En substituant $118 = 1651 - 511 \times 3$ :
+          \[
+          \begin{aligned}
+          1 &= (1651 - 511 \times 3) \times 13 - 511 \times 3 \\
+            &= 1651 \times 13 - 511 \times 39 - 511 \times 3 \\
+            &= 1651 \times 13 - 511 \times 42.
+          \end{aligned}
+          \]
+    \item En substituant $511 = 23625 - 1651 \times 14$ :
+          \[
+          \begin{aligned}
+          1 &= 1651 \times 13 - (23625 - 1651 \times 14) \times 42 \\
+            &= 1651 \times 13 - 23625 \times 42 + 1651 \times 588 \\
+            &= 1651 \times 601 - 23625 \times 42.
+          \end{aligned}
+          \]
+    \item En substituant $1651 = 25276 - 23625 \times 1$ :
+          \[
+          \begin{aligned}
+          1 &= (25276 - 23625 \times 1) \times 601 - 23625 \times 42 \\
+            &= 25276 \times 601 - 23625 \times 601 - 23625 \times 42 \\
+            &= 25276 \times 601 - 23625 \times 643.
+          \end{aligned}
+          \]
+    \item En substituant $23625 = 150001 - 25276 \times 5$ :
+          \[
+          \begin{aligned}
+          1 &= 25276 \times 601 - (150001 - 25276 \times 5) \times 643 \\
+            &= 25276 \times 601 - 150001 \times 643 + 25276 \times 3215 \\
+            &= 150001 \times (-643) + 25276 \times 3816.
+          \end{aligned}
+          \]
+    \item En substituant $25276 = 1975309 - 150001 \times 13$ :
+          \[
+          \begin{aligned}
+          1 &= 150001 \times (-643) + (1975309 - 150001 \times 13) \times 3816 \\
+            &= 150001 \times (-643) + 1975309 \times 3816 - 150001 \times 13 \times 3816 \\
+            &= 150001 \times (-643 - 49608) + 1975309 \times 3816 \\
+            &= 150001 \times (-50251) + 1975309 \times 3816.
+          \end{aligned}
+          \]
+\end{enumerate}
+
+On a donc obtenu l'identité de Bézout :
+\[
+1 = 150001 \times (-50251) + 1975309 \times 3816.
+\]
+
+L'inverse de $150001$ modulo $1975309$ est le coefficient $u = -50251$. On le réduit modulo $1975309$ :
+\[
+-50251 + 1975309 = 1925058.
+\]
+Ainsi :
+\[
+\boxed{(150001)^{-1} \equiv 1925058 \pmod{1975309}}.
+\]
+
+La solution particulière est alors :
+\[
+x_0 \equiv b' \times u \equiv 300002 \times 1925058 \pmod{1975309}.
+\]
+En remarquant que $300002 = 2 \times 150001$, on a :
+\[
+300002 \times 1925058 = 2 \times 150001 \times 1925058 \equiv 2 \times 1 \equiv 2 \pmod{1975309}.
+\]
+On retrouve bien $x_0 \equiv 2 \pmod{1975309}$, ce qui confirme le résultat de la première méthode.
+
+\subsection*{Étape 5 : Génération de toutes les solutions modulo $9876545$}
+
+La solution générale de la congruence initiale s'écrit :
+\[
+x \equiv x_0 + k \times n' \pmod{n}, \qquad k \in \mathbb{Z},
+\]
+où $x_0 = 2$ et $n' = 1975309$.
+
+Pour obtenir toutes les solutions distinctes modulo $n = 9876545$, on prend les $d = 5$ premières valeurs de $k$, soit $k \in \{0, 1, 2, 3, 4\}$.
+
+\medskip
+\textbf{Calcul pour chaque valeur de $k$ :}
+\[
+\begin{aligned}
+k = 0 &: \quad x_0 = 2 + 0 \times 1975309 = 2. \\[6pt]
+k = 1 &: \quad x_1 = 2 + 1 \times 1975309 = 2 + 1975309 = 1975311. \\[6pt]
+k = 2 &: \quad x_2 = 2 + 2 \times 1975309 = 2 + 3950618 = 3950620. \\[6pt]
+k = 3 &: \quad x_3 = 2 + 3 \times 1975309 = 2 + 5925927 = 5925929. \\[6pt]
+k = 4 &: \quad x_4 = 2 + 4 \times 1975309 = 2 + 7901236 = 7901238.
+\end{aligned}
+\]
+
+\section*{Conclusion}
+
+L'ensemble des solutions modulo $9876545$ de la congruence
+\[
+750005\,x \equiv 1500010 \pmod{9876545}
+\]
+est :
+\[
+\boxed{\,x \equiv 2,\; 1\,975\,311,\; 3\,950\,620,\; 5\,925\,929,\; 7\,901\,238 \pmod{9\,876\,545}\,}.
+\]
+
+\section*{Vérification détaillée}
+
+On vérifie que chacune des cinq valeurs trouvées satisfait bien l'équation initiale.
+
+\medskip
+\textbf{Vérification pour $x_0 = 2$ :}
+\[
+750005 \times 2 = 1500010.
+\]
+Or $1500010 \equiv 1500010 \pmod{9876545}$. L'égalité est triviale.
+
+\medskip
+\textbf{Vérification pour $x_1 = 1975311$ :}
+\[
+\begin{aligned}
+750005 \times 1975311 &= 750005 \times (2 + 1975309) \\
+&= 750005 \times 2 + 750005 \times 1975309 \\
+&= 1500010 + 750005 \times 1975309.
+\end{aligned}
+\]
+Or $750005 = 5 \times 150001$, donc :
+\[
+750005 \times 1975309 = 5 \times 150001 \times 1975309.
+\]
+Et $5 \times 1975309 = 9876545$ (car $n' = 1975309$ et $n = 5 \times n'$), donc :
+\[
+750005 \times 1975309 = 150001 \times 9876545 \equiv 0 \pmod{9876545}.
+\]
+Ainsi :
+\[
+750005 \times 1975311 \equiv 1500010 + 0 \equiv 1500010 \pmod{9876545}.
+\]
+
+\medskip
+\textbf{Vérification pour $x_2 = 3950620$ :}
+\[
+\begin{aligned}
+750005 \times 3950620 &= 750005 \times (2 + 2 \times 1975309) \\
+&= 1500010 + 2 \times 750005 \times 1975309.
+\end{aligned}
+\]
+D'après le calcul précédent, $750005 \times 1975309 \equiv 0 \pmod{9876545}$, donc :
+\[
+750005 \times 3950620 \equiv 1500010 \pmod{9876545}.
+\]
+
+\medskip
+\textbf{Vérification pour $x_3 = 5925929$ :}
+\[
+\begin{aligned}
+750005 \times 5925929 &= 750005 \times (2 + 3 \times 1975309) \\
+&= 1500010 + 3 \times (750005 \times 1975309) \\
+&\equiv 1500010 \pmod{9876545}.
+\end{aligned}
+\]
+
+\medskip
+\textbf{Vérification pour $x_4 = 7901238$ :}
+\[
+\begin{aligned}
+750005 \times 7901238 &= 750005 \times (2 + 4 \times 1975309) \\
+&= 1500010 + 4 \times (750005 \times 1975309) \\
+&\equiv 1500010 \pmod{9876545}.
+\end{aligned}
+\]
+
+\medskip
+Toutes les solutions sont ainsi rigoureusement vérifiées.
+
+\end{document}

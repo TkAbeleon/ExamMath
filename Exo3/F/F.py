@@ -1,64 +1,45 @@
 import numpy as np
+from scipy.integrate import quad
 import matplotlib.pyplot as plt
 
-# Domaine : demi-plan Re(s) > -2
-x_min, x_max = -1.9, 5.0
-y_min, y_max = -4.0, 4.0
-nx, ny = 201, 201
+a = np.log(2)
 
-x = np.linspace(x_min, x_max, nx)
-y = np.linspace(y_min, y_max, ny)
-X, Y = np.meshgrid(x, y)
-S = X + 1j*Y
+def f_quad(t):
+    """
+    Calcule f(t) = (1/π) ∫_0^∞ cos(ωt) / (a + ω) dω
+    en utilisant la quadrature de Fourier de QUAD (weight='cos').
+    """
+    if np.abs(t) < 1e-12:
+        return np.inf          # singularité logarithmique en 0
 
-# Calcul de F(s) = 1 / ln(2 + |s|)
-# |s| = sqrt(x^2 + y^2)
-modS = np.abs(S)
-F = 1.0 / np.log(2.0 + modS)
+    # QUAD avec weight='cos' intègre automatiquement
+    #   ∫_0^∞ (1/(a+ω)) * cos(ωt) dω
+    res, err = quad(lambda w: 1.0 / (a + w), 0, np.inf,
+                    weight='cos', wvar=t,
+                    limit=500, epsabs=1e-10, epsrel=1e-10)
+    return res / np.pi
 
-# Partie réelle et imaginaire
-u = np.real(F)
-v = np.imag(F)
+# Vectorisation pour tracer
+f_vec = np.vectorize(f_quad)
 
-# Vérification que v est partout nulle (aux erreurs numériques près)
-print(f"Max |Im(F)| = {np.max(np.abs(v)):.3e}")
+# Points de calcul (on évite 0)
+t_vals = np.linspace(-5, 5, 1001)
+t_vals = t_vals[t_vals != 0]
+f_vals = f_vec(t_vals)
 
-# Calcul des dérivées partielles par différences finies
-dx = x[1] - x[0]
-dy = y[1] - y[0]
-
-# du/dx, du/dy
-dudx = (u[2:,1:-1] - u[:-2,1:-1]) / (2*dx)
-dudy = (u[1:-1,2:] - u[1:-1,:-2]) / (2*dy)
-
-# dv/dx, dv/dy (devraient être nuls mais calculés quand même)
-dvdx = (v[2:,1:-1] - v[:-2,1:-1]) / (2*dx)
-dvdy = (v[1:-1,2:] - v[1:-1,:-2]) / (2*dy)
-
-# Cauchy-Riemann : du/dx == dv/dy  et  du/dy == -dv/dx
-erreur_CR1 = np.abs(dudx - dvdy)
-erreur_CR2 = np.abs(dudy + dvdx)
-print(f"Erreur max Cauchy-Riemann (1) : {np.max(erreur_CR1):.3e}")
-print(f"Erreur max Cauchy-Riemann (2) : {np.max(erreur_CR2):.3e}")
-print("Si ces erreurs ne sont pas ~0, la fonction n'est pas holomorphe.")
-print("Ici elles sont grandes car la fonction est réelle et dépend de |s|.")
-
-# Visualisation : partie réelle u(x,y) et sa dépendance en |s|
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,5))
-cp1 = ax1.contourf(X, Y, u, levels=30, cmap='viridis')
-plt.colorbar(cp1, ax=ax1)
-ax1.set_title(r"$u(x,y) = \mathrm{Re}\,F(s)$")
-ax1.set_xlabel('Re(s)')
-ax1.set_ylabel('Im(s)')
-
-# Coupe pour y=0
-ax2.plot(x, u[:, (ny-1)//2], 'r-', label='coupe Im(s)=0')
-ax2.set_title('F(s) sur l\'axe réel')
-ax2.set_xlabel('s (réel)')
-ax2.set_ylabel('F(s)')
-ax2.grid(True)
-ax2.legend()
-
-plt.tight_layout()
-plt.savefig('preuve_non_holomorphe.png', dpi=150)
+# Tracé
+plt.figure(figsize=(10, 5))
+plt.plot(t_vals, f_vals, label=r'$f(t)$ (quadrature directe)')
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title(r'Transformée inverse de $F(s)=\frac{1}{\ln 2 + |s|}$')
+plt.grid(True)
+plt.legend()
+plt.xlim(t_vals[0], t_vals[-1])
 plt.show()
+
+# Quelques valeurs
+test_values = np.array([0.1, 0.5, 1.0, 2.0, 3.0])
+print("t\t f(t)")
+for t in test_values:
+    print(f"{t:.2f}\t {f_quad(t):.8f}")
